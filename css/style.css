@@ -2452,30 +2452,9 @@ body.dark .search-area{
   object-fit: cover;
 }
 
-/* sağ tərəf: search + ikonlar */
-.top-actions{
-  flex: 1 1 auto;         /* topbar-da qalan bütün yeri alsın */
-  min-width: 0;           /* ÇOX VACİB: search sıxıla bilsin */
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: nowrap;      /* 1 sətirdə saxla */
-  justify-content: flex-end;
-}
-
-/* search ən böyük hissə olsun */
-.search{
-  flex: 1 1 auto;
-  min-width: 0;           /* ÇOX VACİB */
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: 999px;
-}
 
 .search input{
-  width: 100%;
+  width: 40%;
   min-width: 0;           /* ÇOX VACİB */
   border: none;
   outline: none;
@@ -2510,7 +2489,7 @@ body.dark .search-area{
   .search{ padding: 8px 10px; }
   .search-icon{ display: none; } /* yer açmaq üçün */
 }
-.top-actions{ overflow-x: auto; }
-.top-actions::-webkit-scrollbar{ display:none; }
+
+
 
 
