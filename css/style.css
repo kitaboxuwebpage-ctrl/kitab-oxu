@@ -2429,4 +2429,88 @@ body.dark .search-area{
   outline: none;
   background: transparent;
 }
+/* ===== TOPBAR: HƏR ŞEY YAN-YANA (1 SƏTİR) ===== */
+.topbar{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  flex-wrap: nowrap;      /* 1 sətirdə saxla */
+}
+
+/* logo */
+.brand{
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+.brand-logo{
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+/* sağ tərəf: search + ikonlar */
+.top-actions{
+  flex: 1 1 auto;         /* topbar-da qalan bütün yeri alsın */
+  min-width: 0;           /* ÇOX VACİB: search sıxıla bilsin */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;      /* 1 sətirdə saxla */
+  justify-content: flex-end;
+}
+
+/* search ən böyük hissə olsun */
+.search{
+  flex: 1 1 auto;
+  min-width: 0;           /* ÇOX VACİB */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+}
+
+.search input{
+  width: 100%;
+  min-width: 0;           /* ÇOX VACİB */
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+/* ikon düymələri */
+.lang-btn, .menu-btn, .icon-btn{
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+}
+
+.lang-flag{
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+/* ÇOX kiçik ekranlarda daha da yığcam et */
+@media (max-width: 390px){
+  .topbar{ gap: 8px; padding: 8px 10px; }
+  .brand-logo{ width: 32px; height: 32px; }
+
+  .lang-btn, .menu-btn, .icon-btn{ width: 34px; height: 34px; }
+  .lang-flag{ width: 20px; height: 20px; }
+
+  .search{ padding: 8px 10px; }
+  .search-icon{ display: none; } /* yer açmaq üçün */
+}
+.top-actions{ overflow-x: auto; }
+.top-actions::-webkit-scrollbar{ display:none; }
+
 
