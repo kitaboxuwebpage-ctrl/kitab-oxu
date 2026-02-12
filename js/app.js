@@ -394,3 +394,199 @@ window.addEventListener("DOMContentLoaded", () => {
 }
 
 );
+
+(() => {
+  const bubbleText = document.getElementById("bubbleText");
+  const bubbleDots = document.querySelector("#assistantBubble .bubble-dots");
+
+  if (!bubbleText || !bubbleDots) return;
+
+  const messages = [
+    "Salamlar! 👋",
+    "Xoş gəlmisiniz ✨",
+    "Sifarişinizi seçdiniz? 👀",
+    "İstəsəniz axtarışdan istifadə edin 🔎",
+    "Səbətə əlavə edib davam edin 🛒"
+  ];
+
+  let i = 0;
+
+  const showMessage = async () => {
+    // typing
+    bubbleDots.style.display = "inline-flex";
+    await new Promise(r => setTimeout(r, 600));
+
+    // message
+    bubbleText.textContent = messages[i % messages.length];
+    bubbleDots.style.display = "none";
+    i += 1;
+  };
+
+  // start
+  showMessage();
+  setInterval(showMessage, 4500);
+
+  // (istəsən) bubble-a klik edəndə dərhal növbəti mesaj
+  document.getElementById("assistantBubble")?.addEventListener("click", () => {
+    i += 1;
+    bubbleDots.style.display = "none";
+    bubbleText.textContent = messages[i % messages.length];
+  });
+})();
+document.addEventListener("DOMContentLoaded", () => {
+  const bubbleText = document.getElementById("bubbleText");
+  const bubbleDots = document.querySelector("#assistantBubble .bubble-dots");
+  if (!bubbleText) return;
+
+  const messages = [
+    "Salamlar! 👋",
+    "Xoş gəlmisiniz ✨",
+    "Sifarişinizi seçin 🙂",
+    "Acsınız? 🍕",
+    "Səbətə əlavə edib davam edin 🛒"
+  ];
+
+  let i = 0;
+
+  // Başlanğıcda salamlar göstər və bir az gözlə
+  bubbleText.textContent = messages[0];
+
+  const showNext = async () => {
+    i = (i + 1) % messages.length;
+
+    if (bubbleDots) bubbleDots.style.display = "inline-flex";
+    await new Promise(r => setTimeout(r, 700)); // typing effekti
+    if (bubbleDots) bubbleDots.style.display = "none";
+
+    bubbleText.textContent = messages[i];
+  };
+
+  // 1-ci dəyişiklik gec olsun ki "Salamlar" bir az qalsın
+  setTimeout(() => {
+    showNext();
+    setInterval(showNext, 4500);
+  }, 2500);
+});
+
+(() => {
+  const isEditable = (el) => {
+    if (!el) return false;
+    const tag = (el.tagName || "").toLowerCase();
+    return tag === "input" || tag === "textarea" || el.isContentEditable;
+  };
+
+  // Sağ klik menyusu
+  document.addEventListener("contextmenu", (e) => {
+    if (isEditable(e.target)) return;
+    e.preventDefault();
+  });
+
+  // Copy/Cut/Paste
+  ["copy", "cut", "paste"].forEach((evt) => {
+    document.addEventListener(evt, (e) => {
+      if (isEditable(e.target)) return;
+      e.preventDefault();
+    });
+  });
+
+  // Seçim (highlight) və drag
+  document.addEventListener("selectstart", (e) => {
+    if (isEditable(e.target)) return;
+    e.preventDefault();
+  });
+  document.addEventListener("dragstart", (e) => e.preventDefault());
+
+  // Keyboard qısa yolları
+  document.addEventListener("keydown", (e) => {
+    if (isEditable(e.target)) return;
+
+    const k = (e.key || "").toLowerCase();
+    const ctrlOrCmd = e.ctrlKey || e.metaKey;
+
+    // Ctrl/Cmd + C/V/X/A/S/P/U
+    if (ctrlOrCmd && ["c","v","x","a","s","p","u"].includes(k)) {
+      e.preventDefault();
+    }
+
+    // F12 və Ctrl+Shift+I/J/C (tam zəmanətli deyil, amma çox vaxt işləyir)
+    if (e.key === "F12") e.preventDefault();
+    if (ctrlOrCmd && e.shiftKey && ["i","j","c"].includes(k)) e.preventDefault();
+  });
+})();
+
+const addSound = document.getElementById("addSound");
+
+function playAddSound(){
+  if (!addSound) return;
+  addSound.currentTime = 0;
+  addSound.volume = 0.35;   // yumşaq səviyyə
+  addSound.play().catch(()=>{});
+}
+
+// Sənin + düymələrin hansı class-dırsa onu yaz.
+// Məs: <button class="add-btn">+</button>
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".add-btn");
+  if (!btn) return;
+  playAddSound();
+});
+
+let audioUnlocked = false;
+document.addEventListener("click", () => {
+  if (!addSound || audioUnlocked) return;
+  addSound.play().then(() => {
+    addSound.pause();
+    addSound.currentTime = 0;
+    audioUnlocked = true;
+  }).catch(()=>{});
+}, { once: true });
+
+document.addEventListener("click", () => {
+  const audio = document.getElementById("addSound");
+  if (!audio) return;
+  audio.currentTime = 0;
+  audio.volume = 0.4;
+  audio.play().catch(()=>{});
+});
+
+document.addEventListener("click", () => {
+  if (!addSound) return;
+
+  addSound.play()
+    .then(() => {
+      addSound.pause();
+      addSound.currentTime = 0;
+    })
+    .catch(()=>{});
+}, { once: true });
+
+document.querySelectorAll(".plus-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    addSound.currentTime = 0;
+    addSound.volume = 0.35;
+    addSound.play().catch(()=>{});
+  });
+});
+
+
+function playPopSound(){
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(220, ctx.currentTime);
+
+  gain.gain.setValueAtTime(0.3, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime + 0.12);
+}
+
+document.querySelectorAll(".plus-btn").forEach(btn=>{
+  btn.addEventListener("click", playPopSound);
+});
